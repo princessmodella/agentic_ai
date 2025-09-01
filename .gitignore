@@ -1,0 +1,24 @@
+﻿# Python
+.venv/
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+
+# Chroma & local DB
+chromadb/
+*.sqlite
+*.db
+
+# Traces and demo videos (do not commit large videos)
+traces/
+*.mp4
+*.mov
+
+# Secrets
+.env
