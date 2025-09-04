@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project A - Web Research Agent</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Project A - Web Research Agent</h1>
+      <p class="lead">Enter a query or URL to get a summary and sources.</p>
+    </div>
+
+    {% if error %}
+      <div class="message">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" class="form">
+      <input type="text" name="text" placeholder="Enter URL or query">
+      <input type="text" name="question" placeholder="Optional question">
+      <button type="submit" class="btn">Submit</button>
+    </form>
+
+    {% if answer %}
+      <div class="results">
+        <h2>Answer / Summary</h2>
+        <ul class="results-list">
+          {% for line in answer.summary.split('\n') %}
+            <li>
+              <p class="snippet">{{ line }}</p>
+              {% if report_path %}
+                <p class="meta"><a href="{{ report_path }}">View report</a></p>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    <div class="footer">
+      &copy; 2025 Project A - Web Research Agent
+    </div>
+  </div>
+</body>
+</html>

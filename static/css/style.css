@@ -1,0 +1,141 @@
+/* Global Reset + Box Sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Body Base */
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #f9fafb;
+  color: #111827;
+  line-height: 1.6;
+  padding: 1rem;
+}
+
+/* Container */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* Header */
+.header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.header .lead {
+  font-size: 1rem;
+  color: #4b5563;
+  margin-bottom: 1.5rem;
+}
+
+/* Form */
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.form input,
+.form select {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+}
+
+.form input:focus,
+.form select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37,99,235,0.3);
+}
+
+.btn {
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.btn:hover {
+  background: #1d4ed8;
+}
+
+/* Results */
+.results h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.results-list {
+  list-style: none;
+  padding: 0;
+}
+
+.results-list li {
+  background: #f3f4f6;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.snippet {
+  margin-bottom: 0.5rem;
+  color: #111827;
+  font-family: monospace;
+  white-space: pre-wrap;
+}
+
+.meta a {
+  font-size: 0.9rem;
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.meta a:hover {
+  text-decoration: underline;
+}
+
+/* Messages & Notes */
+.message, .note {
+  background: #eef2ff;
+  border: 1px solid #c7d2fe;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  font-family: monospace;
+  white-space: pre-wrap;
+  margin-bottom: 1rem;
+}
+
+/* Footer */
+.footer {
+  margin-top: 2rem;
+  font-size: 0.85rem;
+  color: #6b7280;
+  text-align: center;
+}
+
+/* Extra responsiveness for small screens */
+@media (max-width: 600px) {
+  .form {
+    flex-direction: column;
+  }
+}

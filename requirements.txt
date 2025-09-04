@@ -1,0 +1,7 @@
+﻿tenacity
+requests
+beautifulsoup4
+lxml
+openai
+tiktoken
+python-dotenv
