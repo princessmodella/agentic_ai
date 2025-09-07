@@ -1,66 +1,34 @@
-﻿# Core ML & NLP
+﻿# Core
+streamlit==1.49.1
+blinker==1.9.0
+gitpython==3.1.45
+packaging==25.0
+pillow==11.3.0
+protobuf==3.20.3
+pyarrow==11.0.0
+tenacity==9.1.2
+toml==0.10.2
+tornado==6.2
+typing-extensions==4.7.1
+watchdog==3.0.0
+markupsafe==2.1.3
+
+# ML / NLP
 torch==2.8.0
+transformers==4.42.0
 sentence-transformers==5.1.0
 onnxruntime==1.22.1
-transformers==4.42.0
-safetensors==0.6.2
-
-# Streamlit & UI
-streamlit==1.49.1
-streamlit-option-menu==0.4.0
-altair==5.5.0
-pydeck==0.9.1
-
-# Web & scraping
-beautifulsoup4==4.13.5
-requests==2.32.5
-httpx==0.28.1
-playwright==1.55.0
-bs4==0.0.2
-pyngrok==7.3.0
-
-# Data & computation
-numpy==2.3.2
-pandas==2.3.2
-scipy==1.16.1
-scikit-learn==1.7.1
-faiss-cpu==1.12.0
-networkx==3.5
-mpmath==1.3.0
-
-# Utilities
-python-dotenv==1.1.1
-python-dateutil==2.9.0.post0
-pytz==2025.2
-regex==2025.9.1
-rich==14.1.0
-markdown-it-py==4.0.0
-mdurl==0.1.2
-pyyaml==6.0.2
-
-# Web frameworks
-Flask==3.1.2
-Jinja2==3.1.6
-Werkzeug==3.1.2
-click==8.2.1
-itsdangerous==2.2.0
-
-# Authentication / security
-bcrypt==4.3.0
-oauthlib==3.3.1
-requests-oauthlib==2.0.0
-rsa==4.9.1
-
-# Dev tools
-setuptools==80.9.0
-build==1.3.0
-pyproject_hooks==1.2.0
-joblib==1.5.2
-threadpoolctl==3.6.0
-overrides==7.7.0
-coloredlogs==15.0.1
-
-# Vector DB
 chromadb==1.0.20
-cachetools==5.5.2
-orjson==3.11.3
+faiss-cpu==1.12.0
+numpy>=1.22,<2.0
+scipy==1.10.1
+scikit-learn==1.2.2
+huggingface-hub==0.13.4
+tqdm==4.66.1
+
+# Other helpers
+beautifulsoup4==4.13.0
+requests==2.32.0
+httpx==0.28.0
+playwright==1.55.0
+pyngrok==7.3.0
