@@ -1,32 +1,13 @@
-import fitz  # PyMuPDF
-import docx
+# fetcher.py
 import requests
 from bs4 import BeautifulSoup
+from tenacity import retry, stop_after_attempt, wait_exponential
 
-def fetch_web(url):
-    try:
-        r = requests.get(url, timeout=10)
-        soup = BeautifulSoup(r.text, 'html.parser')
-        # Remove scripts/styles
-        for s in soup(['script','style']):
-            s.extract()
-        return soup.get_text(separator="\n")
-    except Exception as e:
-        return ""
-
-def fetch_pdf(file_path_or_stream):
-    text = ""
-    pdf_doc = fitz.open(stream=file_path_or_stream, filetype="pdf")
-    for page in pdf_doc:
-        text += page.get_text()
-    return text
-
-def fetch_txt(file_stream):
-    return file_stream.read().decode("utf-8")
-
-def fetch_docx(file_stream):
-    doc = docx.Document(file_stream)
-    text = ""
-    for para in doc.paragraphs:
-        text += para.text + "\n"
-    return text
+@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=1, max=10))
+def fetch_text(url: str, timeout: int = 10) -> str:
+    r = requests.get(url, timeout=timeout, headers={"User-Agent":"Mozilla/5.0 (compatible)"})
+    r.raise_for_status()
+    soup = BeautifulSoup(r.text, "lxml")
+    # get body text, fallback to whole page
+    body = soup.body.get_text(separator="\n") if soup.body else soup.get_text(separator="\n")
+    return body.strip()
