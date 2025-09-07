@@ -1,3 +1,23 @@
+# ---- lazy imports to avoid crashing the app in minimal Cloud env ----
+def try_import(name):
+    try:
+        module = __import__(name)
+        return module
+    except Exception:
+        return None
+
+# explicitly import modules you use that are heavy
+torch = try_import("torch")
+sentence_transformers = try_import("sentence_transformers")
+transformers = try_import("transformers")
+chromadb = try_import("chromadb")
+faiss = try_import("faiss")
+onnxruntime = try_import("onnxruntime")
+bs4 = try_import("bs4")
+openai = try_import("openai")
+reportlab = try_import("reportlab")
+fitz = try_import("fitz")  # PyMuPDF
+docx = try_import("docx")
 # streamlit_app.py
 import os
 import io
