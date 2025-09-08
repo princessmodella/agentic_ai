@@ -30,12 +30,12 @@ else:
     logger.warning("HF_API_TOKEN not set. Add HF_API_TOKEN to your .env at project root.")
 
 # Hugging Face client availability
+HAS_HF_CLIENT = False
 try:
-    from huggingface_hub import InferenceClient
+    from huggingface_hub.inference import InferenceClient
     HAS_HF_CLIENT = True
-except Exception:
-    HAS_HF_CLIENT = False
-    logger.info("huggingface_hub.InferenceClient not available; falling back to REST requests.")
+except ImportError:
+    logger.info("huggingface_hub InferenceClient not available; will use REST only.")
 
 def _parse_json_response(resp):
     """Helper to normalize Hugging Face REST responses into {text, raw}."""
@@ -64,8 +64,8 @@ def query_hf(prompt: str, model: str | None = None, timeout: int = 30):
 
     model = model or HF_MODEL
 
-    # Try InferenceClient first
-    if HAS_HF_CLIENT:
+    # ✅ Skip InferenceClient if using bloom (avoid StopIteration)
+    if HAS_HF_CLIENT and "bloom" not in model.lower():
         try:
             client = InferenceClient(model=model, token=HF_API_TOKEN)
             resp = client.text_generation(prompt, max_new_tokens=200, do_sample=True, temperature=0.7)
@@ -106,7 +106,7 @@ def test_models(models: list | None = None, test_prompt: str = "Hello"):
     results = []
     for m in models:
         try:
-            if HAS_HF_CLIENT:
+            if HAS_HF_CLIENT and "bloom" not in m.lower():
                 client = InferenceClient(model=m, token=HF_API_TOKEN)
                 resp = client.text_generation(test_prompt, max_new_tokens=10)
                 results.append({"model": m, "ok": True, "snippet": str(resp)[:300]})
