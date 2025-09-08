@@ -1,3 +1,12 @@
+# Hugging Face client availability
+HAS_HF_CLIENT = False
+try:
+    from huggingface_hub import InferenceClient
+    HAS_HF_CLIENT = True
+except ImportError:
+    import logging
+    logging.warning("huggingface_hub InferenceClient not available; using REST only.")
+
 # llm_client.py
 import os
 import logging
