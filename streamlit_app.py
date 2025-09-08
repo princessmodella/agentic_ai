@@ -32,6 +32,22 @@ import streamlit as st
 
 from rag_query import query_rag
 from utils import save_file, summarize_file
+from dotenv import find_dotenv
+import os
+from llm_client import test_models
+
+st.sidebar.header("HF Debug")
+env_path = find_dotenv()
+st.sidebar.write("env path:", env_path or "NOT FOUND")
+st.sidebar.write("HF_MODEL:", os.getenv("HF_MODEL"))
+token_preview = os.getenv("HF_API_TOKEN")
+st.sidebar.write("HF_API_TOKEN:", token_preview[:8] + "..." if token_preview else "NOT SET")
+
+if st.sidebar.button("Run HF quick check"):
+    st.sidebar.info("Testing models...")
+    status = test_models()
+    st.sidebar.json(status)
+
 
 st.set_page_config(page_title="Deep RAG Engine", layout="wide")
 

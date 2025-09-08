@@ -1,25 +1,29 @@
 import os
-import requests
 from dotenv import load_dotenv
+from huggingface_hub import InferenceClient
 
-# Load .env
+# Load environment variables
 load_dotenv()
 
-
-
 HF_API_TOKEN = os.getenv("HF_API_TOKEN")
-HF_MODEL = os.getenv("HF_MODEL", "gpt2")  # fallback to gpt2 if not set
+HF_MODEL = os.getenv("HF_MODEL", "bigscience/bloom-560m")
 
-print("HF_API_TOKEN loaded:", HF_API_TOKEN[:10] + "..." if HF_API_TOKEN else "❌ None")
+# Debug check
+print("HF_API_TOKEN loaded:", HF_API_TOKEN[:10] + "..." if HF_API_TOKEN else "❌ NOT FOUND")
+print("HF_MODEL:", HF_MODEL)
 
-if not HF_API_TOKEN:
-    raise ValueError("❌ Missing Hugging Face token! Set HF_API_TOKEN in your .env file.")
+# Create Hugging Face inference client
+client = InferenceClient(model=HF_MODEL, token=HF_API_TOKEN)
 
-def query_hf(prompt: str, model: str = None):
-    model = model or HF_MODEL
-    API_URL = f"https://api-inference.huggingface.co/models/{model}"
-    headers = {"Authorization": f"Bearer {HF_API_TOKEN}"}
-
-    response = requests.post(API_URL, headers=headers, json={"inputs": prompt})
-    response.raise_for_status()
-    return response.json()
+def query_hf(prompt: str):
+    """Query Hugging Face model and return text response"""
+    try:
+        response = client.text_generation(
+            prompt,
+            max_new_tokens=200,
+            temperature=0.7,
+            do_sample=True
+        )
+        return {"text": response}
+    except Exception as e:
+        return {"error": str(e)}
