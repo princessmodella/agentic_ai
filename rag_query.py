@@ -4,12 +4,17 @@ import os
 import openai
 from huggingface_hub import InferenceClient
 
-from indexer import query_vector_db
 from llm_client import query_hf
 
 def query_rag(question: str):
-    docs = query_vector_db(question)
-    context = "\n".join(docs)
-    prompt = f"Use the following context to answer the question:\n\n{context}\n\nQuestion: {question}\nAnswer:"
-    answer = query_hf(prompt)
-    return answer
+    prompt = f"Answer the following question in detail:\n\n{question}\n\n"
+    result = query_hf(prompt)
+
+    if isinstance(result, dict) and "error" in result:
+        return f"⚠️ Error: {result['error']}"
+    
+    # Hugging Face returns a list of dicts with "generated_text"
+    try:
+        return result[0]["generated_text"]
+    except Exception:
+        return "⚠️ Unexpected response format from model."
