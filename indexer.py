@@ -5,6 +5,7 @@ import chromadb
 from chromadb import Settings
 from sentence_transformers import SentenceTransformer
 import openai
+import uuid
 
 # -------------------- Initialize -------------------- #
 # OpenAI API key from environment
@@ -27,13 +28,13 @@ else:
 embed_model = SentenceTransformer("all-MiniLM-L6-v2")
 
 # -------------------- Core Functions -------------------- #
-def add_documents_from_text(text: str, source: str = "unknown") -> None:
-    """Add a document string to the ChromaDB collection with embeddings."""
-    embeddings = embed_model.encode([text]).tolist()
+def add_documents_from_text(text, source="uploaded_document"):
+    embedding = embed_model.encode([text])
     collection.add(
         documents=[text],
-        embeddings=embeddings,
-        metadatas=[{"source": source}]
+        embeddings=embedding,
+        metadatas=[{"source": source}],
+        ids=[str(uuid.uuid4())]   # required unique id
     )
 
 def top_k_retrieve(query: str, k: int = 5) -> List[Dict]:
