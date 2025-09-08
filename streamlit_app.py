@@ -1,4 +1,4 @@
-# ---- lazy imports to avoid crashing the app in minimal Cloud env ----
+# ---- lazy imports to avoid crashing in minimal Cloud env ----
 def try_import(name):
     try:
         module = __import__(name)
@@ -6,7 +6,7 @@ def try_import(name):
     except Exception:
         return None
 
-# explicitly import modules you use that are heavy
+# heavy/optional imports
 torch = try_import("torch")
 sentence_transformers = try_import("sentence_transformers")
 transformers = try_import("transformers")
@@ -18,25 +18,24 @@ openai = try_import("openai")
 reportlab = try_import("reportlab")
 fitz = try_import("fitz")  # PyMuPDF
 docx = try_import("docx")
-# streamlit_app.py
+
+# ---- core imports ----
 import os
-import io
 import streamlit as st
-from reportlab.pdfgen import canvas
-import fitz  # PyMuPDF
-import docx
-from docx import Document
-# put this at the top of streamlit_app.py (before any OpenAI call)
-import os, sys
-import streamlit as st
+from dotenv import find_dotenv
 
 from rag_query import query_rag
 from utils import save_file, summarize_file
-from dotenv import find_dotenv
-import os
-from llm_client import test_models
 
+# Try to import test_models safely
+try:
+    from llm_client import test_models
+except ImportError:
+    test_models = None
+
+# ---- Sidebar Debug Info ----
 st.sidebar.header("HF Debug")
+
 env_path = find_dotenv()
 st.sidebar.write("env path:", env_path or "NOT FOUND")
 st.sidebar.write("HF_MODEL:", os.getenv("HF_MODEL"))
@@ -44,16 +43,21 @@ token_preview = os.getenv("HF_API_TOKEN")
 st.sidebar.write("HF_API_TOKEN:", token_preview[:8] + "..." if token_preview else "NOT SET")
 
 if st.sidebar.button("Run HF quick check"):
-    st.sidebar.info("Testing models...")
-    status = test_models()
-    st.sidebar.json(status)
+    if test_models:
+        st.sidebar.info("Testing models...")
+        status = test_models()
+        st.sidebar.json(status)
+    else:
+        st.sidebar.error("⚠️ test_models not available in llm_client.py")
 
-
+# ---- Page Config ----
 st.set_page_config(page_title="Deep RAG Engine", layout="wide")
 
+# ---- Sidebar Menu ----
 menu = ["Home", "Ask Question", "Upload & Summarize", "Admin"]
 choice = st.sidebar.selectbox("Menu", menu)
 
+# ---- Menu Pages ----
 if choice == "Home":
     st.title("Deep RAG Engine")
     st.write("Welcome! Ask questions or summarize uploaded documents.")
